@@ -19,6 +19,9 @@ void FeatureResult::merge(std::shared_ptr<FeatureResult> ptr) {
 }
 
 inline uint32_t time33(const char* str, size_t key_length) {
+    if (key_length == 0) {
+      return 0;
+    }
     uint32_t hash = 5381;
     while (key_length--) {
         hash += (hash << 5) + (*str++);
