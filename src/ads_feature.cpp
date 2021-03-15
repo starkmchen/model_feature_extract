@@ -46,6 +46,9 @@ int32_t hash(const T& t, const H& h) {
 
 template<typename T>
 int32_t log_int(T t) {
+    if (t == 0) {
+      return 0;
+    }
     return int32_t(std::log2(std::max(t, (T)2)));
 }
 
