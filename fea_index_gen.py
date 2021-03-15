@@ -7,7 +7,7 @@ def main(argv):
   f = open(argv[0])
   fw = open(argv[1], 'w')
   for line in f:
-    fea_k, fea_v, click, install, imp = line.strip().split('\t') 
+    fea_k, fea_v, click, install, imp = line.strip().split('\t')
     feature_count[fea_k].add(fea_v)
   for fea_k, v in feature_count.iteritems():
     if len(v) == 1:
@@ -20,7 +20,6 @@ def main(argv):
       fea_cnt = len(v) * 10
     output = [fea_k, 0, fea_cnt, 'int', 0, 0, 0]
     fw.write('\t'.join(map(str, output)) + '\n')
-    
 
 
 
