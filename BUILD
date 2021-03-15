@@ -20,14 +20,3 @@ cc_binary(
         "@pybind11//:pybind11"
     ]
 )
-
-cc_binary(
-    name = "main",
-    srcs = glob(["main.cpp"]),
-    copts = COPTS,
-    includes = glob(["*.h"]),
-    linkopts = ["-lrt"],
-    deps = [
-        "//src:ads_feature"
-    ]
-)
