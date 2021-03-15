@@ -43,7 +43,7 @@ int32_t hash(const T& t, const H& h) {
 
 template<typename T>
 int32_t log_int(T t) {
-    return int32_t(std::log2(std::max(t, (T)1))*100);
+    return int32_t(std::log2(std::max(t, (T)2)));
 }
 
 template<typename T, typename H>
