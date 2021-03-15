@@ -40,7 +40,7 @@ int32_t hash(const std::string& t) {
 
 template<typename T, typename H>
 int32_t hash(const T& t, const H& h) {
-    uint32_t id = hash(std::to_string(t) + std::to_string(h));
+    uint32_t id = hash(std::to_string(t) + "_" + std::to_string(h));
     return id;
 }
 
