@@ -42,16 +42,16 @@ int32_t hash(const T& t, const H& h) {
 }
 
 template<typename T>
-int32_t log(T t) {
-    return int32_t(std::log(std::max(t, (T)1))*100);
+int32_t log_int(T t) {
+    return int32_t(std::log2(std::max(t, (T)1))*100);
 }
 
 template<typename T, typename H>
 int32_t log_div(T a, H b) {
     if (b == 0) {
-        return log(a);
+        return log_int(a);
     } else {
-        return log(double(a) / b);
+        return log_int(double(a) / b);
     }
 }
 
@@ -202,13 +202,13 @@ inline void ModelFeature::extract_ctx_feature(const Context& ctx) {
 
 
 void ModelFeature::extract_acf(const std::string& prefix, const BusinessCountFeature_ActionCountFeature& acf) {
-    auto imp = log(acf.imp());
-    auto click = log(acf.click());
+    auto imp = log_int(acf.imp());
+    auto click = log_int(acf.click());
     auto install_stats = acf.install();
     if (install_stats == 0) {
       install_stats = acf.attr_install();
     }
-    auto install = log(install_stats);
+    auto install = log_int(install_stats);
 
     auto imp_click = log_div(acf.imp(), acf.click());
     auto imp_install = log_div(acf.imp(), install_stats);
