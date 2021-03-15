@@ -31,21 +31,23 @@ public:
       feature_result = std::make_shared<FeatureResult>();
       std::ifstream fin(feature_index);
       if (fin.is_open()) {
-        std::string line, tok_str, fea_key, fea_value;
-        std::getline(fin, line);
-        std::stringstream ssin(line);
-        int32_t cnt = 0;
-        while (std::getline(ssin, tok_str, '_')) {
-          if (cnt == 0) {
-            fea_key = tok_str;
+        std::string line;
+        while(std::getline(fin, line)) {
+          std::stringstream ssin(line);
+          std::string fea_key, fea_value, tok_str;
+          int32_t cnt = 0;
+          while (std::getline(ssin, tok_str, '\t')) {
+            if (cnt == 0) {
+              fea_key = tok_str;
+            }
+            if (cnt == 2) {
+              fea_value = tok_str;
+              break;
+            }
+            cnt++;
           }
-          if (cnt == 2) {
-            fea_value = tok_str;
-            break
-          }
-          cnt++;
+          feature_map_.insert({fea_key, atoi(fea_value.c_str())});
         }
-        feature_map_.insert({fea_key, atoi(fea_value.c_str())});
       }
     }
 
