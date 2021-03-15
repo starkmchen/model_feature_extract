@@ -21,12 +21,9 @@ struct FeatureResult {
 
 typedef std::shared_ptr<FeatureResult> FeatureResultPtr;
 
-int hash_feature(const std::string& name, int32_t id);
-
 class ModelFeature {
 public:
-    ModelFeature() : hash_enable(false),
-        feature_result(std::make_shared<FeatureResult>()) {}
+    ModelFeature() : feature_result(std::make_shared<FeatureResult>()) {}
 
     std::string extract_json(const std::string& str);
     std::string extract_tf_example(const std::string& str);
@@ -62,22 +59,11 @@ private:
 
     void append(const std::string& prefix, const std::string& name, int32_t fid, bool is_seq=false) {
         std::string key = prefix + name;
-        /*
-        auto it = feature_space.find(key);
-        if (it == feature_space.end()) {
-            return;
-        }
-        auto space = it->second;
-        */
-        if (hash_enable) {
-            fid = hash_feature(key, fid);
-        }
         if (is_seq) {
             feature_result->sequence_features[key].push_back(fid);
         } else {
             feature_result->int_features.emplace(key, fid);
         }
     }
-    bool hash_enable;
     FeatureResultPtr feature_result;
 };

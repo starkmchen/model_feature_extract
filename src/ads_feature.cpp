@@ -62,7 +62,6 @@ uint64_t timeSinceEpochMillisec() {
 }
 
 std::string ModelFeature::extract_tf_example(const std::string& str) {
-	hash_enable = true;
 	Sample sample;
     auto status = google::protobuf::util::JsonStringToMessage(str, &sample);
     if (status.ok()) {
@@ -125,7 +124,6 @@ std::string ModelFeature::extract_tf_example(const std::string& str) {
 }
 
 std::string ModelFeature::extract_json(const std::string& str) {
-	hash_enable = true;
     Sample sample;
     auto status = google::protobuf::util::JsonStringToMessage(str, &sample);
     if (status.ok()) {
@@ -294,10 +292,10 @@ void ModelFeature::extract_context(const std::string& prefix, const Context& ctx
     append(prefix, "_nation", hash(ctx.nation()));
     //if (ctx.has_req_time()) {
         auto time = ctx.req_time();
-        int hour = ((time / 1000) % 86400) / 3600;
-        int week = (((time / 1000) % 604800) + 86400) / 86400;
-        append(prefix, "_req_hour", hash(hour));
-        append(prefix, "_req_week", hash(week));
+        int32_t hour = ((time / 1000) % 86400) / 3600;
+        int32_t week = (((time / 1000) % 604800) + 86400) / 86400;
+        append(prefix, "_req_hour", hour);
+        append(prefix, "_req_week", week);
     //}
 }
 
