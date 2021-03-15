@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
 #include <unordered_map>
 #include <google/protobuf/util/json_util.h>
@@ -23,7 +25,29 @@ typedef std::shared_ptr<FeatureResult> FeatureResultPtr;
 
 class ModelFeature {
 public:
-    ModelFeature() : feature_result(std::make_shared<FeatureResult>()) {}
+    ModelFeature() : hash_enable(false), feature_result(std::make_shared<FeatureResult>()) {}
+    ModelFeature(const std::string &feature_index) {
+      hash_enable = true;
+      feature_result = std::make_shared<FeatureResult>();
+      std::ifstream fin(feature_index);
+      if (fin.is_open()) {
+        std::string line, tok_str, fea_key, fea_value;
+        std::getline(fin, line);
+        std::stringstream ssin(line);
+        int32_t cnt = 0;
+        while (std::getline(ssin, tok_str, '_')) {
+          if (cnt == 0) {
+            fea_key = tok_str;
+          }
+          if (cnt == 2) {
+            fea_value = tok_str;
+            break
+          }
+          cnt++;
+        }
+        feature_map_.insert({fea_key, atoi(fea_value.c_str())});
+      }
+    }
 
     std::string extract_json(const std::string& str);
     std::string extract_tf_example(const std::string& str);
@@ -56,9 +80,22 @@ private:
 
     void extract_user_ad_count(const std::string& prefix, const UserAdCount& uac);
 
+    int32_t hash_feature(const std::string &key, int32_t id) {
+      if (id == 0) {
+        return 0;
+      }
+      auto it = feature_map_.find(key);
+      if (it != feature_map_.end()) {
+        return (id % (it->second - 1)) + 1;
+      }
+      return 0;
+    }
 
     void append(const std::string& prefix, const std::string& name, int32_t fid, bool is_seq=false) {
         std::string key = prefix + name;
+        if (hash_enable) {
+          fid = hash_feature(key, fid);
+        }
         if (is_seq) {
             feature_result->sequence_features[key].push_back(fid);
         } else {
@@ -66,4 +103,6 @@ private:
         }
     }
     FeatureResultPtr feature_result;
+    std::map<std::string, int32_t> feature_map_;
+    bool hash_enable;
 };

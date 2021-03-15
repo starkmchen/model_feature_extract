@@ -6,18 +6,23 @@
 namespace py = pybind11;
 
 class PyFeatureExtract {
-public:
-    PyFeatureExtract(const std::string& configs) {}
-    std::string ParseAsJsonString(const std::string& input) {
-        auto mf = std::make_shared<ModelFeature>();
-        return mf->extract_json(input);
+ public:
+  PyFeatureExtract(const std::string& configs) {
+    if (configs.size() > 0) {
+      mf = std::make_shared<ModelFeature>(configs);
+    } else {
+      mf = std::make_shared<ModelFeature>();
     }
+  }
+  std::string ParseAsJsonString(const std::string& input) {
+    return mf->extract_json(input);
+  }
 	py::bytes ParseTFExample(const std::string& input) {
-        auto mf = std::make_shared<ModelFeature>();
-        auto s = mf->extract_tf_example(input);
-		return py::bytes(s);
-    }
-private:
+    auto s = mf->extract_tf_example(input);
+    return py::bytes(s);
+  }
+ private:
+  std::shared_ptr<ModelFeature> mf;
 };
 
 PYBIND11_MODULE(libpyfeature_extract, m) {
