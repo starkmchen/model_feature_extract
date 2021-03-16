@@ -14,9 +14,9 @@ struct FeatureResult {
     // key: feature_name, value: val
     std::map<std::string, float> float_features;
     // key: feature_name, value: sparse_id
-    std::map<std::string, long> int_features;
+    std::map<std::string, uint32_t> int_features;
     // key: feature_name, value: sequence_id
-    std::map<std::string, std::vector<long>> sequence_features;
+    std::map<std::string, std::vector<uint32_t>> sequence_features;
     void merge(std::shared_ptr<FeatureResult> ptr);
 };
 
@@ -82,7 +82,7 @@ private:
 
     void extract_user_ad_count(const std::string& prefix, const UserAdCount& uac);
 
-    int32_t hash_feature(const std::string &key, int32_t id) {
+    uint32_t hash_feature(const std::string &key, uint32_t id) {
       if (id == 0) {
         return 0;
       }
@@ -93,7 +93,7 @@ private:
       return 0;
     }
 
-    void append(const std::string& prefix, const std::string& name, int32_t fid, bool is_seq=false) {
+    void append(const std::string& prefix, const std::string& name, uint32_t fid, bool is_seq=false) {
         std::string key = prefix + name;
         if (hash_enable) {
           fid = hash_feature(key, fid);
@@ -105,6 +105,6 @@ private:
         }
     }
     FeatureResultPtr feature_result;
-    std::map<std::string, int32_t> feature_map_;
+    std::map<std::string, uint32_t> feature_map_;
     bool hash_enable;
 };

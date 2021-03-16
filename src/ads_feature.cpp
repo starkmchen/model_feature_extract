@@ -29,31 +29,26 @@ inline uint32_t time33(const char* str, size_t key_length) {
     return (hash & 0x7FFFFFFF);
 }
 
-template<typename T>
-int32_t hash(const T& t) {
-    return time33((const char*)&t, sizeof(T));
-}
-
-int32_t hash(const std::string& t) {
+uint32_t hash(const std::string& t) {
     return time33(t.c_str(), t.length());
 }
 
 template<typename T, typename H>
-int32_t hash(const T& t, const H& h) {
+uint32_t hash(const T& t, const H& h) {
     uint32_t id = hash(std::to_string(t) + "_" + std::to_string(h));
     return id;
 }
 
 template<typename T>
-int32_t log_int(T t) {
+uint32_t log_int(T t) {
     if (t == 0) {
       return 0;
     }
-    return int32_t(std::log2(std::max(t, (T)2)));
+    return uint32_t(std::log2(std::max(t, (T)2)) * 100);
 }
 
 template<typename T, typename H>
-int32_t log_div(T a, H b) {
+uint32_t log_div(T a, H b) {
     if (b == 0) {
         return log_int(a);
     } else {
