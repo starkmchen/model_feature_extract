@@ -25,10 +25,9 @@ typedef std::shared_ptr<FeatureResult> FeatureResultPtr;
 
 class ModelFeature {
 public:
-    ModelFeature() : hash_enable(false), feature_result(std::make_shared<FeatureResult>()) {}
+    ModelFeature() : hash_enable(false) {}
     ModelFeature(const std::string &feature_index) {
       hash_enable = true;
-      feature_result = std::make_shared<FeatureResult>();
       std::ifstream fin(feature_index);
       if (fin.is_open()) {
         std::string line;
@@ -59,11 +58,6 @@ public:
     void extract_user_ad_feature(const UserAdFeature& uaf);
     void extract_ctx_feature(const Context& ctx);
 
-    void print() {
-        for (auto& it : feature_result->int_features) {
-            std::cout<<it.first<<" "<<it.second<<"\n";
-        }
-    }
 private:
     void extract_user_profile(const std::string& prefix, const UserProfile& up);
     void extract_ad_data(const std::string& prefix, const AdData& ad);
@@ -99,12 +93,12 @@ private:
           fid = hash_feature(key, fid);
         }
         if (is_seq) {
-            feature_result->sequence_features[key].push_back(fid);
+            feature_result_->sequence_features[key].push_back(fid);
         } else {
-            feature_result->int_features.emplace(key, fid);
+            feature_result_->int_features.emplace(key, fid);
         }
     }
-    FeatureResultPtr feature_result;
+    FeatureResultPtr feature_result_;
     std::map<std::string, uint32_t> feature_map_;
     bool hash_enable;
 };

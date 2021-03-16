@@ -178,6 +178,8 @@ std::string ModelFeature::extract_json(const std::string& str) {
 }
 
 FeatureResultPtr ModelFeature::extract_feature(const Feature& feature) {
+    FeatureResultPtr feature_result(std::make_shared<FeatureResult>());
+    feature_result_ = feature_result;
     extract_user_feature(feature.user_profile());
     extract_ad_feature(feature.ad_data());
     extract_user_ad_feature(feature.user_ad_feature());
