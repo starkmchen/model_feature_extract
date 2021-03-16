@@ -4,6 +4,6 @@ import sys
 
 
 
-fe = libpyfeature_extract.PyFeatureExtract('')
+fe = libpyfeature_extract.PyFeatureExtract('feature_index')
 for line in sys.stdin:
-  print fe.extract(line)
+  print(fe.extract(line))
