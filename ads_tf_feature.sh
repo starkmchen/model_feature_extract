@@ -36,5 +36,5 @@ mkdir pre_data
 mkdir train_data
 mv part-0019* pre_data
 mv part* train_data
-cp /root/chenmin/model_feature_extract/feature_index feature_index
+cp /root/chenmin/feature_index feature_index
 touch _SUCCESS
