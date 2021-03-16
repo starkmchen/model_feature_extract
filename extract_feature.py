@@ -10,7 +10,7 @@ import libpyfeature_extract
 import tensorflow as tf
 
 
-fe = libpyfeature_extract.PyFeatureExtract('feature_index')
+fe = libpyfeature_extract.PyFeatureExtract('')
 
 def process(in_path):
     out_path = in_path.replace('train_data', 'ads_train_data')
