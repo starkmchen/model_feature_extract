@@ -16,6 +16,14 @@ def main(argv):
       fea_cnt = 200000
     elif fea_k == "ctx_ip":
       fea_cnt = 100000
+    elif "user_ad_uac" in fea_k or "ad_ac" in fea_k or "up_uc" in fea_k:
+      fea_cnt = 5000
+    elif fea_k == "ctx_ne3":
+      continue
+    elif fea_k == "ad_ai_cid":
+      fea_cnt = 10000
+    elif "ad_ai_aid" in fea_k or "ad_ai_adid" in fea_k:
+      fea_cnt = 3000
     else:
       fea_cnt = len(v) * 10
     output = [fea_k, 0, fea_cnt, 'int', 0, 0, 0]
