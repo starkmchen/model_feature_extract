@@ -16,6 +16,7 @@ message AdInfo {
     int64 is_auto_download = 6; // adserver传到model server
     string creative_id = 7;
     string cp_id = 8;
+    int64 creative_create_time = 9;
 };
 
 message AdCount {
