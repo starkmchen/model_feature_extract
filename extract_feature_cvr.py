@@ -13,7 +13,7 @@ import tensorflow as tf
 fe = libpyfeature_extract.PyFeatureExtract('feature_index')
 
 def process(in_path):
-    out_path = in_path.replace('train_data', 'ads_train_data_cvr')
+    out_path = in_path.replace('train_data', 'nt_ads_train_data_cvr')
     print(in_path, out_path)
     filename = out_path
     options_zlib = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP)
