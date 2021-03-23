@@ -2,6 +2,7 @@
 set -x
 day=$(date -d "1 day ago" +%Y%m%d)
 aws=/usr/local/bin/aws
+cwd=$(pwd)
 
 echo $day
 
@@ -32,6 +33,7 @@ tf_data_dir=/root/ads_train_data/$day
 rm -rf $tf_data_dir
 mkdir $tf_data_dir
 
+cd $cwd
 ls /root/train_data/$day/p* | xargs python extract_feature.py
 
 cd $tf_data_dir
@@ -52,6 +54,7 @@ tf_data_dir=/root/nt_ads_train_data_cvr/$day
 rm -rf $tf_data_dir
 mkdir $tf_data_dir
 
+cd $cwd
 ls /root/train_data/$day/p* | xargs python extract_feature_cvr.py
 
 cd $tf_data_dir
