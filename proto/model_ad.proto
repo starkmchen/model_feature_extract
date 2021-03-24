@@ -17,6 +17,8 @@ message AdInfo {
     string creative_id = 7;
     string cp_id = 8;
     int64 creative_create_time = 9;
+    int32 day_attr_install_cap = 10;
+    double bid_price = = 11;
 };
 
 message AdCount {
