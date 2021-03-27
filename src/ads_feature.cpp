@@ -63,25 +63,28 @@ uint64_t timeSinceEpochMillisec() {
 }
 
 std::string ModelFeature::extract_tf_example(const std::string& str) {
-	Sample sample;
-    auto status = google::protobuf::util::JsonStringToMessage(str, &sample);
-    if (status.ok()) {
-        auto result = extract_feature(sample.feature());
+  Sample sample;
+  google::protobuf::util::JsonParseOptions options;
+  options.ignore_unknown_fields = true;
+  auto status =
+      google::protobuf::util::JsonStringToMessage(str, &sample, options);
+  if (status.ok()) {
+    auto result = extract_feature(sample.feature());
 		tensorflow_def::Example example;
 		auto features = example.mutable_features()->mutable_feature();
-        for (auto it : result->int_features) {
+    for (auto it : result->int_features) {
 			tensorflow_def::Feature feature;
 			auto int64 = feature.mutable_int64_list();
 			int64->mutable_value()->Add(it.second);
 			(*features)[it.first] = feature;
 		}
-        for (auto it : result->float_features) {
+    for (auto it : result->float_features) {
 			tensorflow_def::Feature feature;
 			auto floats = feature.mutable_float_list();
 			floats->mutable_value()->Add(it.second);
 			(*features)[it.first] = feature;
 		}
-        for (auto it : result->sequence_features) {
+    for (auto it : result->sequence_features) {
 			tensorflow_def::Feature feature;
 			auto int64 = feature.mutable_int64_list();
 			for (auto v : it.second) {
@@ -125,9 +128,12 @@ std::string ModelFeature::extract_tf_example(const std::string& str) {
 }
 
 std::string ModelFeature::extract_json(const std::string& str) {
-    Sample sample;
-    auto status = google::protobuf::util::JsonStringToMessage(str, &sample);
-    if (status.ok()) {
+  Sample sample;
+  google::protobuf::util::JsonParseOptions options;
+  options.ignore_unknown_fields = true;
+  auto status =
+      google::protobuf::util::JsonStringToMessage(str, &sample, options);
+  if (status.ok()) {
         auto result = extract_feature(sample.feature());
         std::ostringstream oss;
         oss << "{\"label\": {"
