@@ -57,6 +57,7 @@ public:
     void extract_ad_feature(const AdData& ad);
     void extract_user_ad_feature(const UserAdFeature& uaf);
     void extract_ctx_feature(const Context& ctx);
+	void extract_ctx_ad_feature(const Context& ctx, const AdData& ad);
 
 private:
     void extract_user_profile(const std::string& prefix, const UserProfile& up);
@@ -74,6 +75,7 @@ private:
     void extract_ad_info(const std::string& prefix, const AdInfo& ai);
     void extract_ad_count(const std::string& prefix, const AdCount& ac);
 
+	void extract_ctx_ad(const std::string& prefix, const Context& ctx, const AdInfo& ai);
     void extract_user_ad_count(const std::string& prefix, const UserAdCount& uac);
 
     uint32_t hash_feature(const std::string &key, uint32_t id) {

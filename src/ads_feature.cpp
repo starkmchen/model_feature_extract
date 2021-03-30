@@ -190,6 +190,7 @@ FeatureResultPtr ModelFeature::extract_feature(const Feature& feature) {
     extract_ad_feature(feature.ad_data());
     extract_user_ad_feature(feature.user_ad_feature());
     extract_ctx_feature(feature.context());
+    extract_ctx_ad_feature(feature.context(), feature.ad_data());
     return feature_result;
 }
 
@@ -208,6 +209,43 @@ inline void ModelFeature::extract_user_ad_feature(const UserAdFeature& uaf) {
 inline void ModelFeature::extract_ctx_feature(const Context& ctx) {
     extract_context("ctx", ctx);
 }
+
+inline void ModelFeature::extract_ctx_ad_feature(const Context& ctx, const AdData& ad){
+  extract_ctx_ad("ctx_ad", ctx, ad.ad_info());
+}
+
+void ModelFeature::extract_ctx_ad(const std::string& prefix, const Context& ctx, const AdInfo& ai) {
+        // ctx & ad_id feature
+        append(prefix, "_ne_ad_id", hash(ctx.network_type() + "_" + std::to_string(ai.ad_id())));
+        append(prefix, "_os_ad_id", hash(ctx.os_version() + "_" + std::to_string(ai.ad_id())));
+        append(prefix, "_brand_ad_id", hash(ctx.brand() + "_" + std::to_string(ai.ad_id())));
+        append(prefix, "_model_ad_id", hash(ctx.model() + "_" + std::to_string(ai.ad_id())));
+        append(prefix, "_app_ver_ad_id", hash(ctx.app_version_code()+ "_" + std::to_string(ai.ad_id())));
+        auto hour = std::to_string(((ctx.req_time() / 1000) % 86400) / 3600);
+        append(prefix, "_req_hour_ad_id", hash(hour+ "_" + std::to_string(ai.ad_id())));
+        // ctx & app_id feature
+        append(prefix, "_ne_app_id", hash(ctx.network_type()+ "_" + ai.app_id()));
+        append(prefix, "_os_app_id", hash(ctx.os_version() + "_" + ai.app_id()));
+        append(prefix, "_brand_app_id", hash(ctx.brand() + "_" +  ai.app_id()));
+        append(prefix, "_model_app_id", hash(ctx.model() + "_" +  ai.app_id()));
+        append(prefix, "_app_ver_app_id", hash(ctx.app_version_code()+ "_" + ai.app_id()));
+        append(prefix, "_req_hour_app_id", hash(hour + "_" +  ai.app_id()));
+        // ctx & category feature
+        append(prefix, "_ne_cate", hash(ctx.network_type() + "_" + ai.category()));
+        append(prefix, "_os_cate", hash(ctx.os_version() + "_" +  ai.category()));
+        append(prefix, "_brand_cate", hash(ctx.brand() + "_" +  ai.category()));
+        append(prefix, "_model_cate", hash(ctx.model() + "_" +  ai.category()));
+        append(prefix, "_app_ver_cate", hash(ctx.app_version_code() + "_" +  ai.category()));
+        append(prefix, "_req_hour_cate", hash(hour + "_" +  ai.category()));
+        // ctx & creative_id feature
+        append(prefix, "_ne_c_id", hash(ctx.network_type() + "_" +  ai.creative_id()));
+        append(prefix, "_os_c_id", hash(ctx.os_version() + "_" +  ai.creative_id()));
+        append(prefix, "_brand_c_id", hash(ctx.brand() + "_" + ai.creative_id()));
+        append(prefix, "_model_c_id", hash(ctx.model() + "_" +  ai.creative_id()));
+        append(prefix, "_app_ver_c_id", hash(ctx.app_version_code() + "_" + ai.creative_id()));
+        append(prefix, "_req_hour_c_id", hash(hour + "_" + ai.creative_id()));
+}
+
 
 
 void ModelFeature::extract_acf(const std::string& prefix, const BusinessCountFeature_ActionCountFeature& acf) {
@@ -249,16 +287,11 @@ void ModelFeature::extract_bcf(const std::string& prefix, const BusinessCountFea
 }
 
 void ModelFeature::extract_ad_info(const std::string& prefix, const AdInfo& ai) {
-    //if (ai.has_ad_id()) {
-        append(prefix, "_adid", hash(std::to_string(ai.ad_id())));
-    //}
-    //if (ai.has_app_id()) {
-        append(prefix, "_aid", hash(ai.app_id()));
-    //}
-    //if (ai.has_category()) {
-        append(prefix, "_cate", hash(ai.category()));
-    //}
-        append(prefix, "_cid", hash(ai.creative_id()));
+  append(prefix, "_adid", hash(std::to_string(ai.ad_id())));
+  append(prefix, "_aid", hash(ai.app_id()));
+  append(prefix, "_cate", hash(ai.category()));
+  append(prefix, "_cid", hash(ai.creative_id()));
+  append(prefix, "_attp", hash(std::to_string(ai.attr_platform())));
 }
 
 void ModelFeature::extract_ad_data(const std::string& prefix, const AdData& ad) {
